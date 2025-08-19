@@ -1,20 +1,151 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>로그인</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MovieLog - 로그인</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', 'Segoe UI', sans-serif;
+      background: #121212;
+      color: #f5f5f5;
+    }
+
+    header {
+      background-color: #1f1f1f;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand {
+      color: #ffd54f;
+      font-weight: 700;
+      font-size: 1.3rem;
+      text-decoration: none;
+    }
+
+    main {
+      max-width: 420px;
+      margin: 4rem auto;
+      background: #1e1e1e;
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: #ffd54f;
+    }
+
+    form div {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #e0e0e0;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #3c3c3c;
+      background-color: #2c2c2c;
+      color: #f5f5f5;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #ffd54f;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(to right, #f39c12, #f1c40f);
+      border: none;
+      color: #1e1e1e;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #f1c40f, #f39c12);
+    }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      margin-top: 1.5rem;
+      text-align: center;
+      background-color: #db4437;
+      color: white;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #c1351d;
+    }
+
+    @media (max-width: 500px) {
+      main {
+        margin: 2rem 1rem;
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
 <body>
+
 <header>
-  <a href="/" class="brand">🌀 임시로고</a>
+  <a href="/" class="brand">🎬 MovieLog</a>
 </header>
+
 <main>
   <h1>로그인</h1>
+
   <form method="post" action="/login">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-    <div><label>이메일 <input type="email" name="username" required></label></div>
-    <div><label>비밀번호 <input type="password" name="password" required></label></div>
-    <button type="submit">로그인</button>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+    <div>
+      <label for="username">이메일</label>
+      <input type="email" id="username" name="username" placeholder="example@domain.com" required />
+    </div>
+
+    <div>
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" name="password" placeholder="********" required />
+    </div>
+
+    <button type="submit">🎟️ 입장하기</button>
   </form>
-  <a href="/oauth2/authorization/google" class="btn btn-primary">구글로 로그인</a>
+
+  <a href="/oauth2/authorization/google" class="btn-primary">🔐 구글 계정으로 로그인</a>
 </main>
+
 </body>
 </html>

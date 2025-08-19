@@ -1,29 +1,134 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>새 글</title>
-    <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>감상 작성</title>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+    <style>
+        body {
+          margin: 0;
+          font-family: 'Pretendard', 'Segoe UI', sans-serif;
+          background-color: #121212;
+          color: #f5f5f5;
+        }
+
+        main {
+          max-width: 600px;
+          margin: 4rem auto;
+          background: #1e1e1e;
+          padding: 3rem 2rem;
+          border-radius: 16px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+          text-align: center;
+          margin-bottom: 2rem;
+          font-size: 2rem;
+          color: #ffd54f;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 1.2rem;
+          font-weight: 600;
+          color: #e0e0e0;
+        }
+
+        input[type="text"],
+        textarea {
+          width: 100%;
+          padding: 0.8rem;
+          background-color: #2c2c2c;
+          color: #f5f5f5;
+          border: 1px solid #444;
+          border-radius: 8px;
+          font-size: 1rem;
+          resize: vertical;
+          transition: border 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+          border-color: #ffd54f;
+          outline: none;
+        }
+
+        textarea {
+          min-height: 200px;
+        }
+
+        .btn-group {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 2rem;
+        }
+
+        .btn {
+          padding: 0.75rem 1.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          border-radius: 8px;
+          text-decoration: none;
+          border: none;
+          cursor: pointer;
+          transition: background 0.3s ease;
+        }
+
+        .btn-save {
+          background: linear-gradient(to right, #2ecc71, #27ae60);
+          color: #1e1e1e;
+        }
+
+        .btn-save:hover {
+          background: linear-gradient(to right, #27ae60, #229954);
+        }
+
+        .btn-list {
+          background: #555;
+          color: #f5f5f5;
+        }
+
+        .btn-list:hover {
+          background: #777;
+        }
+
+        @media (max-width: 600px) {
+          .btn-group {
+            flex-direction: column;
+            gap: 1rem;
+          }
+        }
+    </style>
 </head>
 <body>
-<h1>새 글 작성</h1>
-<form method="post" action="/articles">
-    <input type="hidden" id="article-id" th:value="${article} != null ? ${article.id} : ''" />
-    <div>
-        <label>제목
-            <input type="text" id="title" name="title" required>
-        </label>
-    </div>
-    <div>
-        <label>내용
-            <textarea id="content" name="content" rows="8" required></textarea>
-        </label>
-    </div>
-    <button type="button" id="create-btn">저장</button>
-    <a href="/articles">목록</a>
-</form>
+
+<main>
+    <h1>🎬 감상 기록 작성</h1>
+
+    <form method="post" action="/articles">
+        <input type="hidden" id="article-id" th:value="${article} != null ? ${article.id} : ''" />
+
+        <div>
+            <label for="title">영화 제목</label>
+            <input type="text" id="title" name="title" placeholder="영화 제목을 입력하세요" required />
+        </div>
+
+        <div>
+            <label for="content">감상 내용</label>
+            <textarea id="content" name="content" placeholder="영화에 대한 감상을 자유롭게 남겨보세요." rows="8" required></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" id="create-btn" class="btn btn-save">💾 저장</button>
+            <a href="/articles" class="btn btn-list">📄 목록으로</a>
+        </div>
+    </form>
+</main>
+
 <script src="/js/article.js" defer></script>
 </body>
 </html>

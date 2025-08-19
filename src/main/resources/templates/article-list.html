@@ -1,39 +1,178 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 목록</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>감상록 목록</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <style>
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          font-family: 'Pretendard', 'Segoe UI', sans-serif;
+          background-color: #121212;
+          color: #f5f5f5;
+        }
+
+        header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 2rem;
+          background-color: #1e1e1e;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .brand {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: #ffd54f;
+          text-decoration: none;
+        }
+
+        .auth-section a,
+        .auth-section button {
+          margin-left: 1rem;
+          font-size: 0.95rem;
+          text-decoration: none;
+          color: #f5f5f5;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-weight: 600;
+        }
+
+        .auth-section button:hover,
+        .auth-section a:hover {
+          text-decoration: underline;
+        }
+
+        main {
+          max-width: 720px;
+          margin: 3rem auto;
+          padding: 0 1rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+          margin-bottom: 1.5rem;
+          text-align: center;
+          color: #ffd54f;
+        }
+
+        .post-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .post-list li {
+          background: #1f1f1f;
+          margin-bottom: 1rem;
+          padding: 1.2rem 1rem;
+          border-radius: 8px;
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+          transition: box-shadow 0.2s, background 0.3s;
+        }
+
+        .post-list li:hover {
+          background-color: #2a2a2a;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .post-list a {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #81d4fa;
+          text-decoration: none;
+        }
+
+        .post-list a:hover {
+          text-decoration: underline;
+        }
+
+        .new-post {
+          display: block;
+          width: 100%;
+          max-width: 150px;
+          margin: 0 auto 2rem;
+          padding: 0.7rem 1.2rem;
+          font-size: 1rem;
+          font-weight: 600;
+          text-align: center;
+          background-color: #43a047;
+          color: white;
+          border-radius: 8px;
+          text-decoration: none;
+          transition: background 0.3s;
+        }
+
+        .new-post:hover {
+          background-color: #388e3c;
+        }
+
+        .no-posts {
+          text-align: center;
+          font-size: 1.1rem;
+          color: #9e9e9e;
+          margin-top: 2rem;
+        }
+
+        @media (max-width: 600px) {
+          header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .auth-section {
+            margin-top: 0.5rem;
+          }
+        }
+    </style>
 </head>
 <body>
+
 <header>
-    <a href="/" class="brand">🌀 임시로고</a>
-    <div>
-      <span sec:authorize="isAnonymous()">
-        <a href="/login">로그인</a>
-        <a href="/join">회원가입</a>
-      </span>
+    <a href="/" class="brand">🎬 MovieLog</a>
+
+    <div class="auth-section">
+    <span sec:authorize="isAnonymous()">
+      <a href="/login">로그인</a>
+      <a href="/join">회원가입</a>
+    </span>
+
         <span sec:authorize="isAuthenticated()">
-        <span>안녕하세요, <strong th:text="${displayName}"></strong>님!</span>
-        <form method="post" action="/logout" style="display:inline;">
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-          <button type="submit">로그아웃</button>
-        </form>
-      </span>
+      <span>안녕하세요, <strong th:text="${displayName}"></strong>님</span>
+      <form method="post" action="/logout" style="display:inline;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit">로그아웃</button>
+      </form>
+    </span>
     </div>
 </header>
-<h1>게시글 목록</h1>
-<div sec:authorize="isAuthenticated()">
-    <a href="/articles/new">새글</a> <!-- 비회원은 안 보임 -->
-</div>
 
-<div th:if="${#lists.isEmpty(articles)}">아직 글이 없습니다.</div>
-<ul th:unless="${#lists.isEmpty(articles)}">
-    <li th:each="a : ${articles}">
-        <a th:href="@{'/articles/' + ${a.id}}" th:text="${a.title}">제목</a>
-    </li>
-</ul>
+<main>
+    <h1>📽️ 감상 기록 목록</h1>
+
+    <div sec:authorize="isAuthenticated()">
+        <a href="/articles/new" class="new-post">+ 감상 추가</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(articles)}" class="no-posts">
+        아직 등록된 감상록이 없습니다.
+    </div>
+
+    <ul th:unless="${#lists.isEmpty(articles)}" class="post-list">
+        <li th:each="a : ${articles}">
+            <a th:href="@{'/articles/' + ${a.id}}" th:text="${a.title}">감상 제목</a>
+        </li>
+    </ul>
+</main>
+
 </body>
 </html>
